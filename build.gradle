@@ -1,0 +1,51 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+    }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "0.5.4.RELEASE"
+    id "com.jfrog.bintray" version "1.2"
+}
+apply from: 'gradle/plugin.gradle'
+
+version "0.4.0"
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.3'
+    provided 'org.springframework.boot:spring-boot-starter-logging'
+    provided "org.springframework.boot:spring-boot-starter-actuator"
+    provided "org.springframework.boot:spring-boot-autoconfigure"
+    provided "org.springframework.boot:spring-boot-starter-tomcat"
+
+    provided group: 'org.springframework', name: 'spring-webmvc'
+//    compile 'com.github.scribejava:scribejava-apis:2.5.2'
+//    compile 'com.ning:async-http-client:1.6.3'
+    provided 'org.grails.plugins:spring-security-oauth2:0.4+'
+
+    console "org.grails:grails-console"
+}
+
+//grailsPublish {
+//     TODO: Provide values here
+//    user = 'user'
+//    key = 'key'
+//    githubSlug = 'foo/bar'
+//    license {
+//        name = 'Apache-2.0'
+//    }
+//    title = "My Plugin"
+//    desc = "Full plugin description"
+//    developers = [johndoe: "John Doe"]
+//    portalUser = ""
+//    portalPassword = ""
+//}
+
+//assets {
+//    packagePlugin = true
+//}
