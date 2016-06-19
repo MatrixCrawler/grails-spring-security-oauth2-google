@@ -14,7 +14,7 @@ plugins {
 }
 apply from: 'gradle/plugin.gradle'
 
-version "0.6.0"
+version "0.6.1"
 
 dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.3'
