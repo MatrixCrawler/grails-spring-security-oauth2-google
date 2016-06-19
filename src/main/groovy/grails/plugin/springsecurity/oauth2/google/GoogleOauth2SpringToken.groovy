@@ -14,7 +14,7 @@ import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
  */
 class GoogleOauth2SpringToken  extends OAuth2SpringToken{
 
-    Oauth2GoogleService oAuth2GoogleService
+    GoogleOAuth2Service oAuth2GoogleService
     private String email
 
     GoogleOauth2SpringToken(OAuth2AccessToken accessToken, String email) {

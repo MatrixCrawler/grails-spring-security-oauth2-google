@@ -10,7 +10,7 @@ import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
 import grails.transaction.Transactional
 
 @Transactional
-class Oauth2GoogleService extends OAuth2AbstractProviderService {
+class GoogleOAuth2Service extends OAuth2AbstractProviderService {
 
     @Override
     String getProviderID() {

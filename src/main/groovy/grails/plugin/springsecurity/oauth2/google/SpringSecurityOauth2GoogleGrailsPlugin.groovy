@@ -70,9 +70,9 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
     void doWithApplicationContext() {
         log.trace("doWithApplicationContext")
         def SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('SpringSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
-        def Oauth2GoogleService oAuth2GoogleService = grailsApplication.mainContext.getBean('Oauth2GoogleService') as Oauth2GoogleService
+        def GoogleOAuth2Service googleOAuth2Service = grailsApplication.mainContext.getBean('GoogleOAuth2Service') as GoogleOAuth2Service
         try {
-            oAuth2BaseService.registerProvider(oAuth2GoogleService)
+            oAuth2BaseService.registerProvider(googleOAuth2Service)
         } catch (OAuth2Exception exception) {
 //            println("There was an OAuth2Exception")
             log.error("There was an oAuth2Exception", exception)
