@@ -1,6 +1,10 @@
 package grails.plugin.springsecurity.oauth2.google
 
-import grails.plugins.*
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.oauth2.SpringSecurityOauth2BaseService
+import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
+import grails.plugins.Plugin
+import org.slf4j.LoggerFactory
 
 class SpringSecurityOauth2GoogleGrailsPlugin extends Plugin {
 
@@ -8,15 +12,16 @@ class SpringSecurityOauth2GoogleGrailsPlugin extends Plugin {
     def grailsVersion = "3.1.8 > *"
     // resources that are excluded from plugin packaging
     def pluginExcludes = [
-        "grails-app/views/error.gsp"
+            "grails-app/views/error.gsp"
     ]
+    List loadAfter = ['spring-security-oauth2']
 
     // TODO Fill in these fields
     def title = "Grails Spring Security Oauth2 Google" // Headline display name of the plugin
-    def author = "Your name"
+    def author = "Johannes Brunswicker"
     def authorEmail = ""
     def description = '''\
-Brief summary/description of the plugin.
+This plugin provides the capability to authenticate via g+-oauth provider. Depends on grails-spring-security-oauth2.
 '''
     def profiles = ['web']
 
@@ -26,7 +31,7 @@ Brief summary/description of the plugin.
     // Extra (optional) plugin metadata
 
     // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
+    def license = "APACHE"
 
     // Details of company behind the plugin (if there is one)
 //    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
@@ -39,32 +44,50 @@ Brief summary/description of the plugin.
 
     // Online location of the plugin's browseable source code.
 //    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
+    def log
 
-    Closure doWithSpring() { {->
-            // TODO Implement runtime spring config (optional)
+    Closure doWithSpring() {
+        { ->
+            // Check if there is an SpringSecurity configuration
+            def config = SpringSecurityUtils.securityConfig
+            if (!config || !config.active) {
+                println("ERROR: There is no SpringSecurity configuration or SpringSecurity is disabled")
+                println("ERROR: Stopping configuration of SpringSecurity Oauth2")
+                return
+            }
+
+            if (!hasProperty('log')) {
+                log = LoggerFactory.getLogger(SpringSecurityOauth2GoogleGrailsPlugin)
+            }
+
+//            println("\nConfiguring Spring Security OAuth2 Google plugin...")
+            SpringSecurityUtils.loadSecondaryConfig('DefaultSpringSecurityOAuth2GoogleConfig')
+//            println("... finished configuring Spring Security OAuth2 Google\n")
         }
     }
 
-    void doWithDynamicMethods() {
-        // TODO Implement registering dynamic methods to classes (optional)
-    }
-
+    @Override
     void doWithApplicationContext() {
-        // TODO Implement post initialization spring config (optional)
-    }
-
-    void onChange(Map<String, Object> event) {
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
-    }
-
-    void onConfigChange(Map<String, Object> event) {
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
-    }
-
-    void onShutdown(Map<String, Object> event) {
-        // TODO Implement code that is executed when the application shuts down (optional)
+        log.trace("doWithApplicationContext")
+        def SpringSecurityOauth2BaseService oAuth2BaseService = grailsApplication.mainContext.getBean('SpringSecurityOauth2BaseService') as SpringSecurityOauth2BaseService
+        def Oauth2GoogleService oAuth2GoogleService = grailsApplication.mainContext.getBean('Oauth2GoogleService') as Oauth2GoogleService
+        try {
+            oAuth2BaseService.registerProvider(oAuth2GoogleService)
+        } catch (OAuth2Exception exception) {
+//            println("There was an OAuth2Exception")
+            log.error("There was an oAuth2Exception", exception)
+            log.error("OAuth2 Google not loaded")
+//            println(ExceptionUtils.getMessage(exception))
+        }
+//        for (serviceClass in grailsApplication.serviceClasses) {
+//            if (OAuth2ProviderService.class.isAssignableFrom(serviceClass.clazz)) {
+//                println "Found valid oauth provider service: ${serviceClass.clazz}"
+//                String beanName = "${serviceClass.logicalPropertyName}Service"
+//                OAuth2ProviderService providerService = grailsApplication.mainContext.getBean(beanName) as OAuth2ProviderService
+//                oAuth2BaseService.registerProvider(providerService)
+//            } else {
+//                log.error(serviceClass.clazz.getName() + " is not assignable")
+//            }
+//        }
     }
 }
