@@ -11,7 +11,7 @@ Add the following dependencies in `build.gradle`
 dependencies {
 ...
     compile 'org.grails.plugins:spring-security-oauth2:1.+'
-    compile 'org.grails.plugins:spring-security-oauth2-google:1.+'
+    compile 'org.grails.plugins:spring-security-oauth2-google:1.1.+'
 ...
 }
 ```
@@ -31,6 +31,7 @@ grails:
                         successUri: "/oauth2/google/success"    #optional
                         failureUri: "/oauth2/google/failure"    #optional
                         callback: "/oauth2/google/callback"     #optional
+                        scopes: "some_scope"                    #optional, see https://developers.google.com/identity/protocols/googlescopes#monitoringv3
 ```
 You can replace the URIs with your own controller implementation.
 
