@@ -20,7 +20,7 @@ def setIfNotSet = { String name, value ->
 setIfNotSet 'issueTrackerUrl', project.vcsUrl + '/issues'
 setIfNotSet 'websiteUrl', project.vcsUrl
 
-version "0.7.0"
+version "1.0.0"
 group = 'org.grails.plugins'
 
 apply plugin:"eclipse"
@@ -33,6 +33,7 @@ apply plugin: "asset-pipeline"
 ext {
     grailsVersion = project.grailsVersion
     gradleWrapperVersion = project.gradleWrapperVersion
+    bintrayUser = project.bintray_user
 }
 
 repositories {
@@ -63,14 +64,14 @@ task wrapper(type: Wrapper) {
 
 grailsPublish {
 //     TODO: Provide values here
-    user = 'user'
-    key = 'key'
-    githubSlug = 'foo/bar'
+    user = project.bintray_user
+    key = project.bintray_key
+    githubSlug = 'MatrixCrawler/grails-spring-security-oauth2-google'
     license {
         name = 'Apache-2.0'
     }
-    title = "My Plugin"
-    desc = "Full plugin description"
+    title = "Spring Security Oauth2 Google Provider"
+    desc = "This plugin provides the capability to authenticate via g+-oauth provider. Depends on grails-spring-security-oauth2."
     developers = [johndoe: "John Doe"]
     portalUser = ""
     portalPassword = ""
