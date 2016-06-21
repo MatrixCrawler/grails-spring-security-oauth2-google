@@ -33,6 +33,11 @@ class GoogleOAuth2Service extends OAuth2AbstractProviderService {
     }
 
     @Override
+    String getScopeSeparator() {
+        return " "
+    }
+
+    @Override
     OAuth2SpringToken createSpringAuthToken(OAuth2AccessToken accessToken) {
         def user
         def response = getResponse(accessToken)

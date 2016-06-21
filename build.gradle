@@ -20,7 +20,7 @@ def setIfNotSet = { String name, value ->
 setIfNotSet 'issueTrackerUrl', project.vcsUrl + '/issues'
 setIfNotSet 'websiteUrl', project.vcsUrl
 
-version "1.0.0"
+version "1.1.0"
 group = 'org.grails.plugins'
 
 apply plugin:"eclipse"
@@ -52,7 +52,7 @@ dependencies {
     provided 'org.grails:grails-dependencies'
     compile 'org.codehaus.groovy:groovy-all:2.4.3'
     provided 'org.grails.plugins:spring-security-core:3.+'
-    provided 'org.grails.plugins:spring-security-oauth2:0.7+'
+    provided 'org.grails.plugins:spring-security-oauth2:1.1.0'
 
     console "org.grails:grails-console"
 }
