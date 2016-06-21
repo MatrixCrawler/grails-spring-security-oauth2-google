@@ -12,6 +12,14 @@ buildscript {
     }
 }
 
+def setIfNotSet = { String name, value ->
+    if (!project.ext.has(name)) {
+        project.ext[name] = value
+    }
+}
+setIfNotSet 'issueTrackerUrl', project.vcsUrl + '/issues'
+setIfNotSet 'websiteUrl', project.vcsUrl
+
 version "0.7.0"
 group = 'org.grails.plugins'
 

@@ -18,9 +18,9 @@ class SpringSecurityOauth2GoogleGrailsPlugin extends Plugin {
     List loadAfter = ['spring-security-oauth2']
 
     // TODO Fill in these fields
-    def title = "Grails Spring Security Oauth2 Google" // Headline display name of the plugin
+    def title = "Spring Security Oauth2 Google Provider" // Headline display name of the plugin
     def author = "Johannes Brunswicker"
-    def authorEmail = ""
+    def authorEmail = "johannes.brunswicker@gmail.com"
     def description = '''\
 This plugin provides the capability to authenticate via g+-oauth provider. Depends on grails-spring-security-oauth2.
 '''
