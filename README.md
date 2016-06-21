@@ -1,7 +1,7 @@
 Spring Security OAuth2 Google Plugin
 ====================================
 
-Add a Google OAuth2 provider to the Spring Security OAuth2 Plugin.
+Add a Google OAuth2 provider to the [Spring Security OAuth2 Plugin](https://github.com/MatrixCrawler/grails-spring-security-oauth2).
 
 Installation
 ------------
