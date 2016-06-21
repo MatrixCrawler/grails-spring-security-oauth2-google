@@ -155,3 +155,7 @@ nbactions.xml
 .nb-gradle/
 /grails-spring-security-oauth2.iml
 /kindlegen/
+classes
+src/integration-test/
+src/main/webapp/
+*.iml

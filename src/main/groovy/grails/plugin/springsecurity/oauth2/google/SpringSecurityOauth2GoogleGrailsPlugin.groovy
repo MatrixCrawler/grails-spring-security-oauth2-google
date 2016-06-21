@@ -1,5 +1,6 @@
 package grails.plugin.springsecurity.oauth2.google
 
+import grails.plugin.springsecurity.ReflectionUtils
 import grails.plugin.springsecurity.SpringSecurityUtils
 import grails.plugin.springsecurity.oauth2.SpringSecurityOauth2BaseService
 import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
@@ -48,11 +49,20 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
 
     Closure doWithSpring() {
         { ->
+            ReflectionUtils.application = grailsApplication
+            if (grailsApplication.warDeployed) {
+                SpringSecurityUtils.resetSecurityConfig()
+            }
+            SpringSecurityUtils.application = grailsApplication
+
             // Check if there is an SpringSecurity configuration
-            def config = SpringSecurityUtils.securityConfig
-            if (!config || !config.active) {
-                println("ERROR: There is no SpringSecurity configuration or SpringSecurity is disabled")
-                println("ERROR: Stopping configuration of SpringSecurity Oauth2")
+            def coreConf = SpringSecurityUtils.securityConfig
+            boolean printStatusMessages = (coreConf.printStatusMessages instanceof Boolean) ? coreConf.printStatusMessages : true
+            if (!coreConf || !coreConf.active) {
+                if (printStatusMessages) {
+                    println("ERROR: There is no SpringSecurity configuration or SpringSecurity is disabled")
+                    println("ERROR: Stopping configuration of SpringSecurity Oauth2")
+                }
                 return
             }
 
@@ -60,9 +70,13 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
                 log = LoggerFactory.getLogger(SpringSecurityOauth2GoogleGrailsPlugin)
             }
 
-//            println("\nConfiguring Spring Security OAuth2 Google plugin...")
-            SpringSecurityUtils.loadSecondaryConfig('DefaultSpringSecurityOAuth2GoogleConfig')
-//            println("... finished configuring Spring Security OAuth2 Google\n")
+            if (printStatusMessages) {
+                println("Configuring Spring Security OAuth2 Google plugin...")
+            }
+            SpringSecurityUtils.loadSecondaryConfig('DefaultOAuth2GoogleConfig')
+            if (printStatusMessages) {
+                println("... finished configuring Spring Security OAuth2 Google\n")
+            }
         }
     }
 
@@ -74,20 +88,8 @@ This plugin provides the capability to authenticate via g+-oauth provider. Depen
         try {
             oAuth2BaseService.registerProvider(googleOAuth2Service)
         } catch (OAuth2Exception exception) {
-//            println("There was an OAuth2Exception")
             log.error("There was an oAuth2Exception", exception)
             log.error("OAuth2 Google not loaded")
-//            println(ExceptionUtils.getMessage(exception))
         }
-//        for (serviceClass in grailsApplication.serviceClasses) {
-//            if (OAuth2ProviderService.class.isAssignableFrom(serviceClass.clazz)) {
-//                println "Found valid oauth provider service: ${serviceClass.clazz}"
-//                String beanName = "${serviceClass.logicalPropertyName}Service"
-//                OAuth2ProviderService providerService = grailsApplication.mainContext.getBean(beanName) as OAuth2ProviderService
-//                oAuth2BaseService.registerProvider(providerService)
-//            } else {
-//                log.error(serviceClass.clazz.getName() + " is not assignable")
-//            }
-//        }
     }
 }

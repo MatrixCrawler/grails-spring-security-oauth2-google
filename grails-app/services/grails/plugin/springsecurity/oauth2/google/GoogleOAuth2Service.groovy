@@ -24,6 +24,11 @@ class GoogleOAuth2Service extends OAuth2AbstractProviderService {
 
     @Override
     String getProfileScope() {
+        return 'https://www.googleapis.com/oauth2/v2/userinfo'
+    }
+
+    @Override
+    String getScopes() {
         return 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
     }
 
@@ -42,7 +47,7 @@ class GoogleOAuth2Service extends OAuth2AbstractProviderService {
             log.error("No user email from " + getProviderID() + ". Response was:\n" + response.body)
             throw new OAuth2Exception("No user id from " + getProviderID())
         }
-        return new GoogleOauth2SpringToken(accessToken, user?.email)
+        new GoogleOauth2SpringToken(accessToken, user?.email, providerID)
     }
 
 }
