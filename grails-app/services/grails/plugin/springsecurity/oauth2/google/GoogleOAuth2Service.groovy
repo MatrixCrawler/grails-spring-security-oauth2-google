@@ -8,9 +8,12 @@ import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
 import grails.plugin.springsecurity.oauth2.service.OAuth2AbstractProviderService
 import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
 import grails.transaction.Transactional
+import org.grails.web.json.JSONElement
 
 @Transactional
 class GoogleOAuth2Service extends OAuth2AbstractProviderService {
+
+    private JSONElement _user
 
     @Override
     String getProviderID() {
@@ -39,20 +42,22 @@ class GoogleOAuth2Service extends OAuth2AbstractProviderService {
 
     @Override
     OAuth2SpringToken createSpringAuthToken(OAuth2AccessToken accessToken) {
-        def user
         def response = getResponse(accessToken)
         try {
             log.debug("JSON response body: " + accessToken.rawResponse)
-            user = JSON.parse(response.body)
+            _user = JSON.parse(response.body)
         } catch (Exception exception) {
             log.error("Error parsing response from " + getProviderID() + ". Response:\n" + response.body)
             throw new OAuth2Exception("Error parsing response from " + getProviderID(), exception)
         }
-        if (!user?.email) {
+        if (!_user?.email) {
             log.error("No user email from " + getProviderID() + ". Response was:\n" + response.body)
             throw new OAuth2Exception("No user id from " + getProviderID())
         }
-        new GoogleOauth2SpringToken(accessToken, user?.email, providerID)
+        new GoogleOauth2SpringToken(accessToken, _user?.email, providerID)
     }
 
+    JSONElement getUserJSON() {
+        return _user
+    }
 }
