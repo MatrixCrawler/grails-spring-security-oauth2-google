@@ -15,11 +15,18 @@ import grails.plugin.springsecurity.oauth2.token.OAuth2SpringToken
 class GoogleOauth2SpringToken  extends OAuth2SpringToken{
 
     private String email
+    private String givenName
+    private String familyName
+    private URL pictureURL
     private String providerId
 
-    GoogleOauth2SpringToken(OAuth2AccessToken accessToken, String email, String providerId) {
+    GoogleOauth2SpringToken(OAuth2AccessToken accessToken, Map props, String providerId) {
         super(accessToken)
-        this.email = email
+        this.email = props.email
+        this.givenName = props.given_name
+        this.familyName = props.family_name
+        if (props.picture)
+            this.pictureURL = new URL(props.picture)
         this.providerId = providerId
     }
 
@@ -36,5 +43,17 @@ class GoogleOauth2SpringToken  extends OAuth2SpringToken{
     @Override
     String getScreenName() {
         return email
+    }
+
+    String getGivenName() {
+        return givenName
+    }
+
+    String getFamilyName() {
+        return familyName
+    }
+
+    URL getPictureURL() {
+        return pictureURL
     }
 }

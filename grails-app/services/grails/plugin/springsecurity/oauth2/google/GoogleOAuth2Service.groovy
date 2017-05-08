@@ -52,7 +52,7 @@ class GoogleOAuth2Service extends OAuth2AbstractProviderService {
             log.error("No user email from " + getProviderID() + ". Response was:\n" + response.body)
             throw new OAuth2Exception("No user id from " + getProviderID())
         }
-        new GoogleOauth2SpringToken(accessToken, user?.email, providerID)
+        new GoogleOauth2SpringToken(accessToken, user, providerID)
     }
 
 }
